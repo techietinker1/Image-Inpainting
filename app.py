@@ -259,7 +259,6 @@ def api_verify_otp():
             app.permanent_session_lifetime = timedelta(days=30)  # Remember for 30 days
         else:
             session.permanent = False  # Expires when browser closes
-        
         del otp_storage[email]  # Clear OTP after successful verification
         
         return jsonify({
