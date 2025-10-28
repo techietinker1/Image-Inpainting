@@ -1,10 +1,11 @@
 # 🎨 AI Image Inpainting Web App
 
-Remove unwanted objects from photos using AI! Features OTP authentication, email integration, and easy public deployment.
+- Jupyter notebook trains a U‑Net style generator + PatchGAN discriminator and exports the trained generator as a TensorFlow SavedModel.
+- Flask app serves the web UI (canvas upload + mask), runs model inference (SavedModel) and falls back to OpenCV inpainting when needed.
+- Public demo (temporary/ngrok): [https://grace-uncinate-blythe.ngrok-free.dev](https://grace-uncinate-blythe.ngrok-free.dev)
 
 **Built by Rupam Kumari** | MIT License
-
-[![GitHub](https://img.shields.io/badge/GitHub-ImageInpainting-blue)](https://github.com/techietinker01/ImageInpainting)
+[![GitHub](https://img.shields.io/badge/GitHub-ImageInpainting-blue)](https://github.com/techietinker1/Image-Inpainting)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-green)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-2.x-lightgrey)](https://flask.palletsprojects.com/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)](https://www.tensorflow.org/)
@@ -29,8 +30,8 @@ Remove unwanted objects from photos using AI! Features OTP authentication, email
 
 ```powershell
 # Clone repository
-git clone https://github.com/techietinker01/ImageInpainting.git
-cd ImageInpainting
+git clone https://github.com/techietinker1/Image-Inpainting.git
+cd Image-Inpainting
 
 # Create virtual environment
 python -m venv .venv
@@ -195,36 +196,42 @@ ngrok http 5000
 
 ---
 
-## � Project Structure
+## Project structure
 
-```text
-ImageInpainting/
-├── app.py                  # Main Flask app
-├── requirements.txt        # Dependencies
-├── .env                    # Config (not in git)
-├── .gitignore             
-├── README.md              
-├── LICENSE                
-├── static/
-│   ├── index.html         # Login page
-│   ├── app.html           # Inpainting UI
-│   ├── main.js            # Canvas logic
-│   └── styles.css         
-├── saved_model.h5          # Trained model
-├── uploads/               # User images
-├── outputs/               # Results
-└── image-inpainting.ipynb # Training notebook
+```Image Inpainting
+Image Inpainting/
+├─ app.py                      # Flask app: routes, upload/validation, inference, fallback
+├─ image-inpainting.ipynb      # Jupyter notebook: data prep, model definitions, training, export
+├─ requirements.txt            # Python dependencies
+├─ README.md                   # guid
+├─ saved_models/
+│  └─ generator_saved_model/   # SavedModel (saved_model.pb + variables/)
+├─ uploads/
+│  ├─ original_*.jpg           # Uploaded originals (runtime)
+│  └─ mask_*.png               # Uploaded masks (runtime)
+├─ outputs/
+│  └─ inpainted_*.png          # Inference results
+├─ static/
+│  ├─ index.html
+│  ├─ app.html
+│  ├─ main.js
+│  └─ styles.css
+└─ .env.example                # Example env vars (SMTP, secrets)
 ```
 
----
+### Short descriptions
 
-## 🤝 Contributing
+- app.py: load model, expose endpoints (/api/send-otp, /api/verify-otp, /upload_mask), save outputs.
+- image-inpainting.ipynb: builds Generator/Discriminator, training loop, exports SavedModel to saved_models/.
+- saved_models/: runtime model files used by Flask (ensure saved_model.pb + variables/ present).
+- uploads/ and outputs/: runtime storage for inputs and results (create at runtime if missing).
+- .env.example: keep credentials out of VCS; copy to `.env` and fill values.
 
-Contributions welcome! Feel free to:
+### Notes
 
-- Report bugs
-- Suggest features  
-- Submit pull requests
+- Keep SMTP credentials and ngrok authtoken out of repo — use `.env`.
+- Ensure saved_models/generator_saved_model/ exists before running Flask for inference.
+- For deployment, move ngrok usage out and use a hosted deployment (Render/GCP/Azure) or reserve an ngrok domain.
 
 ---
 
@@ -238,11 +245,11 @@ MIT License - Free to use, modify, and distribute!
 
 **Rupam Kumari:**
 
-- GitHub: [@techietinker01](https://github.com/techietinker01)
-- Project: [ImageInpainting](https://github.com/techietinker01/ImageInpainting)
+- GitHub: [@techietinker1](https://github.com/techietinker1)
+- Project: [Image-Inpainting](https://github.com/techietinker1/Image-Inpainting)
 
 ---
 
 **⭐ If you find this helpful, please star the repo!**
 
-**🚀 Happy Inpainting!**
+**🚀 Enjoy Inpainting!**
