@@ -1,9 +1,9 @@
 gunicorn
 python-dotenv
 waitress
-tensorflow==2.20.0
+tensorflow==2.15
 opencv-python
-matplotlib
+matplotlib==3.8.0
 tqdm
 flask
 pillow
